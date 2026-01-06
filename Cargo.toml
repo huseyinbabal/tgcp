@@ -2,7 +2,14 @@
 name = "tgcp"
 version = "1.0.0-rc.1"
 edition = "2021"
-description = "Terminal UI for GCP - lightweight and declarative"
+description = "Terminal UI for GCP - navigate, observe, and manage GCP resources"
+license = "MIT"
+repository = "https://github.com/huseyinbabal/tgcp"
+homepage = "https://github.com/huseyinbabal/tgcp"
+readme = "README.md"
+keywords = ["gcp", "tui", "terminal", "cloud", "infrastructure"]
+categories = ["command-line-utilities", "development-tools"]
+authors = ["Huseyin Babal"]
 
 [dependencies]
 # TUI
