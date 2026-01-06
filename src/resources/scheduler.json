@@ -1,0 +1,70 @@
+{
+  "color_maps": {
+    "job_state": [
+      { "value": "ENABLED", "color": [0, 255, 0] },
+      { "value": "PAUSED", "color": [255, 255, 0] },
+      { "value": "DISABLED", "color": [128, 128, 128] },
+      { "value": "UPDATE_FAILED", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {
+    "scheduler-jobs": {
+      "display_name": "Cloud Scheduler Jobs",
+      "service": "cloudscheduler",
+      "api": {
+        "base": "https://cloudscheduler.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/jobs",
+        "method": "GET"
+      },
+      "response_path": "jobs",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "State", "json_path": "state", "width": 10, "color_map": "job_state" },
+        { "header": "Schedule", "json_path": "schedule", "width": 20 },
+        { "header": "Timezone", "json_path": "timeZone", "width": 20 },
+        { "header": "Last Run", "json_path": "lastAttemptTime", "width": 22 },
+        { "header": "Next Run", "json_path": "scheduleTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Run Now",
+          "api": {
+            "method": "POST",
+            "path": "{name}:run"
+          },
+          "shortcut": "r"
+        },
+        {
+          "display_name": "Pause",
+          "api": {
+            "method": "POST",
+            "path": "{name}:pause"
+          },
+          "shortcut": "p"
+        },
+        {
+          "display_name": "Resume",
+          "api": {
+            "method": "POST",
+            "path": "{name}:resume"
+          },
+          "shortcut": "e"
+        },
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete scheduler job?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

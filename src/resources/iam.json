@@ -1,0 +1,93 @@
+{
+  "resources": {
+    "service-accounts": {
+      "display_name": "Service Accounts",
+      "service": "iam",
+      "api": {
+        "base": "https://iam.googleapis.com/v1",
+        "path": "projects/{project}/serviceAccounts",
+        "method": "GET"
+      },
+      "response_path": "accounts",
+      "id_field": "uniqueId",
+      "name_field": "email",
+      "columns": [
+        { "header": "Email", "json_path": "email", "width": 45 },
+        { "header": "Display Name", "json_path": "displayName", "width": 25 },
+        { "header": "Disabled", "json_path": "disabled", "width": 8 },
+        { "header": "Description", "json_path": "description", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/serviceAccounts/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete service account '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Disable",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/serviceAccounts/{name}:disable"
+          },
+          "shortcut": "x"
+        },
+        {
+          "display_name": "Enable",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/serviceAccounts/{name}:enable"
+          },
+          "shortcut": "e"
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "sa-keys",
+          "display_name": "Keys",
+          "shortcut": "k",
+          "parent_id_field": "email",
+          "filter_param": "serviceAccount"
+        }
+      ]
+    },
+    "sa-keys": {
+      "display_name": "Service Account Keys",
+      "service": "iam",
+      "api": {
+        "base": "https://iam.googleapis.com/v1",
+        "path": "projects/{project}/serviceAccounts/{parent}/keys",
+        "method": "GET"
+      },
+      "response_path": "keys",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 50 },
+        { "header": "Key Type", "json_path": "keyType", "width": 15 },
+        { "header": "Valid After", "json_path": "validAfterTime", "width": 22 },
+        { "header": "Valid Before", "json_path": "validBeforeTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete service account key?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

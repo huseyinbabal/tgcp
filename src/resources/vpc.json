@@ -1,0 +1,179 @@
+{
+  "color_maps": {
+    "network_mode": [
+      { "value": "auto", "color": [0, 255, 0] },
+      { "value": "custom", "color": [0, 200, 255] },
+      { "value": "legacy", "color": [255, 165, 0] }
+    ]
+  },
+  "resources": {
+    "networks": {
+      "display_name": "VPC Networks",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/networks",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Mode", "json_path": "autoCreateSubnetworks", "width": 10 },
+        { "header": "Subnets", "json_path": "subnetworks", "width": 8 },
+        { "header": "Routing Mode", "json_path": "routingConfig.routingMode", "width": 12 },
+        { "header": "MTU", "json_path": "mtu", "width": 6 },
+        { "header": "Created", "json_path": "creationTimestamp", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/networks/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete network '{name}'?",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "subnets",
+          "display_name": "Subnets",
+          "shortcut": "s",
+          "parent_id_field": "name",
+          "filter_param": "network"
+        }
+      ]
+    },
+    "subnets": {
+      "display_name": "Subnets",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/aggregated/subnetworks",
+        "method": "GET"
+      },
+      "response_path": "items.*.subnetworks",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "Region", "json_path": "region", "width": 18 },
+        { "header": "IP Range", "json_path": "ipCidrRange", "width": 18 },
+        { "header": "Gateway", "json_path": "gatewayAddress", "width": 15 },
+        { "header": "Private Google", "json_path": "privateIpGoogleAccess", "width": 14 },
+        { "header": "Purpose", "json_path": "purpose", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/regions/{region}/subnetworks/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete subnet '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Expand IP Range",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/regions/{region}/subnetworks/{name}/expandIpCidrRange"
+          },
+          "shortcut": "e"
+        }
+      ]
+    },
+    "firewalls": {
+      "display_name": "Firewall Rules",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/firewalls",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Network", "json_path": "network", "width": 20 },
+        { "header": "Direction", "json_path": "direction", "width": 10 },
+        { "header": "Priority", "json_path": "priority", "width": 8 },
+        { "header": "Action", "json_path": "allowed", "width": 12 },
+        { "header": "Disabled", "json_path": "disabled", "width": 8 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/firewalls/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete firewall rule '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Disable",
+          "api": {
+            "method": "PATCH",
+            "path": "projects/{project}/global/firewalls/{name}"
+          },
+          "shortcut": "x"
+        },
+        {
+          "display_name": "Enable",
+          "api": {
+            "method": "PATCH",
+            "path": "projects/{project}/global/firewalls/{name}"
+          },
+          "shortcut": "e"
+        }
+      ]
+    },
+    "routes": {
+      "display_name": "Routes",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/routes",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Network", "json_path": "network", "width": 20 },
+        { "header": "Dest Range", "json_path": "destRange", "width": 18 },
+        { "header": "Next Hop", "json_path": "nextHopGateway", "width": 25 },
+        { "header": "Priority", "json_path": "priority", "width": 8 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/routes/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete route '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

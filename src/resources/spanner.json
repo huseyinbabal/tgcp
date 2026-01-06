@@ -1,0 +1,86 @@
+{
+  "color_maps": {
+    "spanner_state": [
+      { "value": "READY", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "UPDATING", "color": [255, 255, 0] }
+    ]
+  },
+  "resources": {
+    "spanner-instances": {
+      "display_name": "Spanner Instances",
+      "service": "spanner",
+      "api": {
+        "base": "https://spanner.googleapis.com/v1",
+        "path": "projects/{project}/instances",
+        "method": "GET"
+      },
+      "response_path": "instances",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 40 },
+        { "header": "Display Name", "json_path": "displayName", "width": 25 },
+        { "header": "State", "json_path": "state", "width": 10, "color_map": "spanner_state" },
+        { "header": "Config", "json_path": "config", "width": 30 },
+        { "header": "Nodes", "json_path": "nodeCount", "width": 6 },
+        { "header": "Processing Units", "json_path": "processingUnits", "width": 16 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Spanner instance? All databases will be deleted!",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "spanner-databases",
+          "display_name": "Databases",
+          "shortcut": "b",
+          "parent_id_field": "name",
+          "filter_param": "instance"
+        }
+      ]
+    },
+    "spanner-databases": {
+      "display_name": "Spanner Databases",
+      "service": "spanner",
+      "api": {
+        "base": "https://spanner.googleapis.com/v1",
+        "path": "{instance}/databases",
+        "method": "GET"
+      },
+      "response_path": "databases",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 50 },
+        { "header": "State", "json_path": "state", "width": 10, "color_map": "spanner_state" },
+        { "header": "Version Retention", "json_path": "versionRetentionPeriod", "width": 18 },
+        { "header": "Earliest Version", "json_path": "earliestVersionTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Spanner database?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

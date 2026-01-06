@@ -1,0 +1,64 @@
+{
+  "color_maps": {
+    "job_state": [
+      { "value": "JOB_STATE_RUNNING", "color": [0, 255, 0] },
+      { "value": "JOB_STATE_DONE", "color": [0, 200, 0] },
+      { "value": "JOB_STATE_PENDING", "color": [255, 255, 0] },
+      { "value": "JOB_STATE_QUEUED", "color": [255, 255, 0] },
+      { "value": "JOB_STATE_CANCELLING", "color": [255, 165, 0] },
+      { "value": "JOB_STATE_CANCELLED", "color": [128, 128, 128] },
+      { "value": "JOB_STATE_DRAINING", "color": [255, 165, 0] },
+      { "value": "JOB_STATE_DRAINED", "color": [128, 128, 128] },
+      { "value": "JOB_STATE_FAILED", "color": [255, 0, 0] },
+      { "value": "JOB_STATE_UPDATED", "color": [0, 255, 255] }
+    ]
+  },
+  "resources": {
+    "dataflow-jobs": {
+      "display_name": "Dataflow Jobs",
+      "service": "dataflow",
+      "api": {
+        "base": "https://dataflow.googleapis.com/v1b3",
+        "path": "projects/{project}/locations/{region}/jobs?filter=ACTIVE",
+        "method": "GET"
+      },
+      "response_path": "jobs",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 35 },
+        { "header": "ID", "json_path": "id", "width": 20 },
+        { "header": "State", "json_path": "currentState", "width": 18, "color_map": "job_state" },
+        { "header": "Type", "json_path": "type", "width": 12 },
+        { "header": "SDK", "json_path": "jobMetadata.sdkVersion.version", "width": 10 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Cancel",
+          "api": {
+            "method": "PUT",
+            "path": "projects/{project}/locations/{region}/jobs/{id}?requestedState=JOB_STATE_CANCELLED"
+          },
+          "shortcut": "c",
+          "confirm": {
+            "message": "Cancel Dataflow job?",
+            "destructive": false
+          }
+        },
+        {
+          "display_name": "Drain",
+          "api": {
+            "method": "PUT",
+            "path": "projects/{project}/locations/{region}/jobs/{id}?requestedState=JOB_STATE_DRAINED"
+          },
+          "shortcut": "D",
+          "confirm": {
+            "message": "Drain Dataflow job? It will stop accepting new data.",
+            "destructive": false
+          }
+        }
+      ]
+    }
+  }
+}

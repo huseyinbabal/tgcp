@@ -1,0 +1,79 @@
+{
+  "color_maps": {
+    "gateway_state": [
+      { "value": "ACTIVE", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "UPDATING", "color": [255, 255, 0] },
+      { "value": "DELETING", "color": [255, 165, 0] },
+      { "value": "FAILED", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {
+    "api-gateways": {
+      "display_name": "API Gateways",
+      "service": "apigateway",
+      "api": {
+        "base": "https://apigateway.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/gateways",
+        "method": "GET"
+      },
+      "response_path": "gateways",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "gateway_state" },
+        { "header": "Display Name", "json_path": "displayName", "width": 25 },
+        { "header": "API Config", "json_path": "apiConfig", "width": 40 },
+        { "header": "Default Hostname", "json_path": "defaultHostname", "width": 35 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete API Gateway?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "api-gateway-apis": {
+      "display_name": "API Gateway APIs",
+      "service": "apigateway",
+      "api": {
+        "base": "https://apigateway.googleapis.com/v1",
+        "path": "projects/{project}/locations/global/apis",
+        "method": "GET"
+      },
+      "response_path": "apis",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 50 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "gateway_state" },
+        { "header": "Display Name", "json_path": "displayName", "width": 25 },
+        { "header": "Managed Service", "json_path": "managedService", "width": 40 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete API?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

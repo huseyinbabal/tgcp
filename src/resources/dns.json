@@ -1,0 +1,63 @@
+{
+  "resources": {
+    "dns-zones": {
+      "display_name": "DNS Managed Zones",
+      "service": "dns",
+      "api": {
+        "base": "https://dns.googleapis.com/dns/v1",
+        "path": "projects/{project}/managedZones",
+        "method": "GET"
+      },
+      "response_path": "managedZones",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "DNS Name", "json_path": "dnsName", "width": 35 },
+        { "header": "Visibility", "json_path": "visibility", "width": 12 },
+        { "header": "Description", "json_path": "description", "width": 30 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/managedZones/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete DNS zone '{name}'?",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "dns-records",
+          "display_name": "Records",
+          "shortcut": "r",
+          "parent_id_field": "name",
+          "filter_param": "zone"
+        }
+      ]
+    },
+    "dns-records": {
+      "display_name": "DNS Records",
+      "service": "dns",
+      "api": {
+        "base": "https://dns.googleapis.com/dns/v1",
+        "path": "projects/{project}/managedZones/{zone}/rrsets",
+        "method": "GET"
+      },
+      "response_path": "rrsets",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 40 },
+        { "header": "Type", "json_path": "type", "width": 8 },
+        { "header": "TTL", "json_path": "ttl", "width": 8 },
+        { "header": "Data", "json_path": "rrdatas", "width": 45 }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+[package]
+name = "tgcp"
+version = "0.1.0"
+edition = "2021"
+description = "Terminal UI for GCP - lightweight and declarative"
+
+[dependencies]
+# TUI
+ratatui = "0.26"
+crossterm = "0.27"
+
+# HTTP Client
+reqwest = { version = "0.11", default-features = false, features = ["json", "rustls-tls", "blocking"] }
+tokio = { version = "1", features = ["full"] }
+url = "2.5"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+
+# Utils
+anyhow = "1.0"
+thiserror = "1.0"
+dirs = "5.0"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+open = "5.0"
+
+# Auth (JWT signing for service accounts)
+jsonwebtoken = "9"
+base64 = "0.21"

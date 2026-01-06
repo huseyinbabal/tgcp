@@ -1,0 +1,97 @@
+{
+  "color_maps": {
+    "redis_state": [
+      { "value": "READY", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "UPDATING", "color": [255, 255, 0] },
+      { "value": "DELETING", "color": [255, 165, 0] },
+      { "value": "REPAIRING", "color": [255, 165, 0] },
+      { "value": "MAINTENANCE", "color": [255, 255, 0] },
+      { "value": "FAILING_OVER", "color": [255, 165, 0] },
+      { "value": "IMPORTING", "color": [0, 255, 255] }
+    ]
+  },
+  "resources": {
+    "redis-instances": {
+      "display_name": "Redis Instances",
+      "service": "redis",
+      "api": {
+        "base": "https://redis.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/instances",
+        "method": "GET"
+      },
+      "response_path": "instances",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 40 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "redis_state" },
+        { "header": "Tier", "json_path": "tier", "width": 12 },
+        { "header": "Memory (GB)", "json_path": "memorySizeGb", "width": 12 },
+        { "header": "Version", "json_path": "redisVersion", "width": 12 },
+        { "header": "Host", "json_path": "host", "width": 15 },
+        { "header": "Port", "json_path": "port", "width": 6 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Redis instance?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Failover",
+          "api": {
+            "method": "POST",
+            "path": "{name}:failover"
+          },
+          "shortcut": "f",
+          "confirm": {
+            "message": "Trigger failover for Redis instance?",
+            "destructive": false
+          }
+        }
+      ]
+    },
+    "memcached-instances": {
+      "display_name": "Memcached Instances",
+      "service": "memcache",
+      "api": {
+        "base": "https://memcache.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/instances",
+        "method": "GET"
+      },
+      "response_path": "instances",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 40 },
+        { "header": "State", "json_path": "state", "width": 12 },
+        { "header": "Node Count", "json_path": "nodeCount", "width": 10 },
+        { "header": "Node CPU", "json_path": "nodeConfig.cpuCount", "width": 8 },
+        { "header": "Node Memory (MB)", "json_path": "nodeConfig.memorySizeMb", "width": 16 },
+        { "header": "Version", "json_path": "memcacheVersion", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Memcached instance?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

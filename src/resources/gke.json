@@ -1,0 +1,99 @@
+{
+  "color_maps": {
+    "cluster_status": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "PROVISIONING", "color": [0, 255, 255] },
+      { "value": "RECONCILING", "color": [255, 255, 0] },
+      { "value": "STOPPING", "color": [255, 165, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] },
+      { "value": "DEGRADED", "color": [255, 100, 100] }
+    ],
+    "nodepool_status": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "PROVISIONING", "color": [0, 255, 255] },
+      { "value": "RECONCILING", "color": [255, 255, 0] },
+      { "value": "STOPPING", "color": [255, 165, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {
+    "gke-clusters": {
+      "display_name": "GKE Clusters",
+      "service": "container",
+      "api": {
+        "base": "https://container.googleapis.com/v1",
+        "path": "projects/{project}/locations/-/clusters",
+        "method": "GET"
+      },
+      "response_path": "clusters",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "Status", "json_path": "status", "width": 12, "color_map": "cluster_status" },
+        { "header": "Location", "json_path": "location", "width": 18 },
+        { "header": "Version", "json_path": "currentMasterVersion", "width": 15 },
+        { "header": "Nodes", "json_path": "currentNodeCount", "width": 6 },
+        { "header": "Mode", "json_path": "autopilot.enabled", "width": 10 },
+        { "header": "Endpoint", "json_path": "endpoint", "width": 16 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/locations/{location}/clusters/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete GKE cluster '{name}'? This is irreversible!",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "node-pools",
+          "display_name": "Node Pools",
+          "shortcut": "n",
+          "parent_id_field": "name",
+          "filter_param": "cluster"
+        }
+      ]
+    },
+    "node-pools": {
+      "display_name": "Node Pools",
+      "service": "container",
+      "api": {
+        "base": "https://container.googleapis.com/v1",
+        "path": "projects/{project}/locations/{location}/clusters/{cluster}/nodePools",
+        "method": "GET"
+      },
+      "response_path": "nodePools",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "Status", "json_path": "status", "width": 12, "color_map": "nodepool_status" },
+        { "header": "Version", "json_path": "version", "width": 15 },
+        { "header": "Machine Type", "json_path": "config.machineType", "width": 18 },
+        { "header": "Disk Size", "json_path": "config.diskSizeGb", "width": 10 },
+        { "header": "Node Count", "json_path": "initialNodeCount", "width": 10 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/locations/{location}/clusters/{cluster}/nodePools/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete node pool '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "resources": {
+    "pubsub-topics": {
+      "display_name": "Pub/Sub Topics",
+      "service": "pubsub",
+      "api": {
+        "base": "https://pubsub.googleapis.com/v1",
+        "path": "projects/{project}/topics",
+        "method": "GET"
+      },
+      "response_path": "topics",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 50 },
+        { "header": "KMS Key", "json_path": "kmsKeyName", "width": 40 },
+        { "header": "Retention", "json_path": "messageRetentionDuration", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Pub/Sub topic? All subscriptions will be deleted!",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "pubsub-subscriptions",
+          "display_name": "Subscriptions",
+          "shortcut": "s",
+          "parent_id_field": "name",
+          "filter_param": "topic"
+        }
+      ]
+    },
+    "pubsub-subscriptions": {
+      "display_name": "Pub/Sub Subscriptions",
+      "service": "pubsub",
+      "api": {
+        "base": "https://pubsub.googleapis.com/v1",
+        "path": "projects/{project}/subscriptions",
+        "method": "GET"
+      },
+      "response_path": "subscriptions",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "Topic", "json_path": "topic", "width": 40 },
+        { "header": "Ack Deadline", "json_path": "ackDeadlineSeconds", "width": 12 },
+        { "header": "Push Endpoint", "json_path": "pushConfig.pushEndpoint", "width": 30 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Pub/Sub subscription '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Seek to Time",
+          "api": {
+            "method": "POST",
+            "path": "{name}:seek"
+          },
+          "shortcut": "t"
+        }
+      ]
+    }
+  }
+}

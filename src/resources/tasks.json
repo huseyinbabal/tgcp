@@ -1,0 +1,72 @@
+{
+  "color_maps": {
+    "queue_state": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "PAUSED", "color": [255, 255, 0] },
+      { "value": "DISABLED", "color": [128, 128, 128] }
+    ]
+  },
+  "resources": {
+    "task-queues": {
+      "display_name": "Cloud Tasks Queues",
+      "service": "cloudtasks",
+      "api": {
+        "base": "https://cloudtasks.googleapis.com/v2",
+        "path": "projects/{project}/locations/{region}/queues",
+        "method": "GET"
+      },
+      "response_path": "queues",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 50 },
+        { "header": "State", "json_path": "state", "width": 10, "color_map": "queue_state" },
+        { "header": "Rate (dispatch/s)", "json_path": "rateLimits.maxDispatchesPerSecond", "width": 17 },
+        { "header": "Concurrent", "json_path": "rateLimits.maxConcurrentDispatches", "width": 12 },
+        { "header": "Max Attempts", "json_path": "retryConfig.maxAttempts", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Pause",
+          "api": {
+            "method": "POST",
+            "path": "{name}:pause"
+          },
+          "shortcut": "p"
+        },
+        {
+          "display_name": "Resume",
+          "api": {
+            "method": "POST",
+            "path": "{name}:resume"
+          },
+          "shortcut": "e"
+        },
+        {
+          "display_name": "Purge",
+          "api": {
+            "method": "POST",
+            "path": "{name}:purge"
+          },
+          "shortcut": "P",
+          "confirm": {
+            "message": "Purge all tasks from queue?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete task queue?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

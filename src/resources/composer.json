@@ -1,0 +1,47 @@
+{
+  "color_maps": {
+    "composer_state": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "UPDATING", "color": [255, 255, 0] },
+      { "value": "DELETING", "color": [255, 165, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {
+    "composer-envs": {
+      "display_name": "Composer Environments",
+      "service": "composer",
+      "api": {
+        "base": "https://composer.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/environments",
+        "method": "GET"
+      },
+      "response_path": "environments",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "composer_state" },
+        { "header": "Airflow Version", "json_path": "config.softwareConfig.airflowConfigOverrides", "width": 15 },
+        { "header": "Python Version", "json_path": "config.softwareConfig.pythonVersion", "width": 14 },
+        { "header": "Node Count", "json_path": "config.nodeCount", "width": 10 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Composer environment? This will delete all DAGs and logs!",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

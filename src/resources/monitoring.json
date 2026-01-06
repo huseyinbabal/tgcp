@@ -1,0 +1,111 @@
+{
+  "color_maps": {
+    "uptime_state": [
+      { "value": "ENABLED", "color": [0, 255, 0] },
+      { "value": "DISABLED", "color": [128, 128, 128] }
+    ]
+  },
+  "resources": {
+    "alert-policies": {
+      "display_name": "Alert Policies",
+      "service": "monitoring",
+      "api": {
+        "base": "https://monitoring.googleapis.com/v3",
+        "path": "projects/{project}/alertPolicies",
+        "method": "GET"
+      },
+      "response_path": "alertPolicies",
+      "id_field": "name",
+      "name_field": "displayName",
+      "columns": [
+        { "header": "Display Name", "json_path": "displayName", "width": 35 },
+        { "header": "Enabled", "json_path": "enabled", "width": 8 },
+        { "header": "Conditions", "json_path": "conditions", "width": 12 },
+        { "header": "Combiner", "json_path": "combiner", "width": 10 },
+        { "header": "Created", "json_path": "creationRecord.mutateTime", "width": 22 },
+        { "header": "Updated", "json_path": "mutationRecord.mutateTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete alert policy?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "uptime-checks": {
+      "display_name": "Uptime Checks",
+      "service": "monitoring",
+      "api": {
+        "base": "https://monitoring.googleapis.com/v3",
+        "path": "projects/{project}/uptimeCheckConfigs",
+        "method": "GET"
+      },
+      "response_path": "uptimeCheckConfigs",
+      "id_field": "name",
+      "name_field": "displayName",
+      "columns": [
+        { "header": "Display Name", "json_path": "displayName", "width": 30 },
+        { "header": "Type", "json_path": "monitoredResource.type", "width": 15 },
+        { "header": "Host", "json_path": "httpCheck.path", "width": 30 },
+        { "header": "Period (s)", "json_path": "period", "width": 10 },
+        { "header": "Timeout (s)", "json_path": "timeout", "width": 11 },
+        { "header": "Regions", "json_path": "selectedRegions", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete uptime check?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "notification-channels": {
+      "display_name": "Notification Channels",
+      "service": "monitoring",
+      "api": {
+        "base": "https://monitoring.googleapis.com/v3",
+        "path": "projects/{project}/notificationChannels",
+        "method": "GET"
+      },
+      "response_path": "notificationChannels",
+      "id_field": "name",
+      "name_field": "displayName",
+      "columns": [
+        { "header": "Display Name", "json_path": "displayName", "width": 30 },
+        { "header": "Type", "json_path": "type", "width": 15 },
+        { "header": "Enabled", "json_path": "enabled", "width": 8 },
+        { "header": "Verified", "json_path": "verificationStatus", "width": 12 },
+        { "header": "Description", "json_path": "description", "width": 30 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete notification channel?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

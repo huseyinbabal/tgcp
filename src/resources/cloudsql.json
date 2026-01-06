@@ -1,0 +1,119 @@
+{
+  "color_maps": {
+    "sql_status": [
+      { "value": "RUNNABLE", "color": [0, 255, 0] },
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "PENDING_CREATE", "color": [0, 255, 255] },
+      { "value": "MAINTENANCE", "color": [255, 255, 0] },
+      { "value": "SUSPENDED", "color": [255, 165, 0] },
+      { "value": "STOPPED", "color": [128, 128, 128] },
+      { "value": "FAILED", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {
+    "sql-instances": {
+      "display_name": "Cloud SQL Instances",
+      "service": "sqladmin",
+      "api": {
+        "base": "https://sqladmin.googleapis.com/v1",
+        "path": "projects/{project}/instances",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "sql_status" },
+        { "header": "Database", "json_path": "databaseVersion", "width": 15 },
+        { "header": "Region", "json_path": "region", "width": 15 },
+        { "header": "Tier", "json_path": "settings.tier", "width": 15 },
+        { "header": "Storage (GB)", "json_path": "settings.dataDiskSizeGb", "width": 12 },
+        { "header": "IP", "json_path": "ipAddresses[0].ipAddress", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/instances/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Cloud SQL instance '{name}'? All data will be lost!",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Stop",
+          "api": {
+            "method": "PATCH",
+            "path": "projects/{project}/instances/{name}"
+          },
+          "shortcut": "x"
+        },
+        {
+          "display_name": "Start",
+          "api": {
+            "method": "PATCH",
+            "path": "projects/{project}/instances/{name}"
+          },
+          "shortcut": "s"
+        },
+        {
+          "display_name": "Restart",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/instances/{name}/restart"
+          },
+          "shortcut": "R",
+          "confirm": {
+            "message": "Restart Cloud SQL instance '{name}'?",
+            "destructive": false
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "sql-databases",
+          "display_name": "Databases",
+          "shortcut": "b",
+          "parent_id_field": "name",
+          "filter_param": "instance"
+        }
+      ]
+    },
+    "sql-databases": {
+      "display_name": "SQL Databases",
+      "service": "sqladmin",
+      "api": {
+        "base": "https://sqladmin.googleapis.com/v1",
+        "path": "projects/{project}/instances/{instance}/databases",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Charset", "json_path": "charset", "width": 12 },
+        { "header": "Collation", "json_path": "collation", "width": 25 },
+        { "header": "Instance", "json_path": "instance", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/instances/{instance}/databases/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete database '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

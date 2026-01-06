@@ -1,0 +1,50 @@
+{
+  "color_maps": {
+    "function_status": [
+      { "value": "ACTIVE", "color": [0, 255, 0] },
+      { "value": "DEPLOYING", "color": [0, 255, 255] },
+      { "value": "DEPLOY_IN_PROGRESS", "color": [0, 255, 255] },
+      { "value": "DELETE_IN_PROGRESS", "color": [255, 165, 0] },
+      { "value": "OFFLINE", "color": [128, 128, 128] },
+      { "value": "UNKNOWN", "color": [255, 255, 0] },
+      { "value": "FAILED", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {
+    "functions": {
+      "display_name": "Cloud Functions",
+      "service": "cloudfunctions",
+      "api": {
+        "base": "https://cloudfunctions.googleapis.com/v2",
+        "path": "projects/{project}/locations/-/functions",
+        "method": "GET"
+      },
+      "response_path": "functions",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 40 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "function_status" },
+        { "header": "Runtime", "json_path": "buildConfig.runtime", "width": 12 },
+        { "header": "Region", "json_path": "environment", "width": 12 },
+        { "header": "Gen", "json_path": "environment", "width": 6 },
+        { "header": "Trigger", "json_path": "eventTrigger.triggerRegion", "width": 15 },
+        { "header": "Updated", "json_path": "updateTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Cloud Function?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "resources": {
+    "log-sinks": {
+      "display_name": "Log Sinks",
+      "service": "logging",
+      "api": {
+        "base": "https://logging.googleapis.com/v2",
+        "path": "projects/{project}/sinks",
+        "method": "GET"
+      },
+      "response_path": "sinks",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Destination", "json_path": "destination", "width": 50 },
+        { "header": "Filter", "json_path": "filter", "width": 35 },
+        { "header": "Disabled", "json_path": "disabled", "width": 8 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/sinks/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete log sink '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "log-metrics": {
+      "display_name": "Log Metrics",
+      "service": "logging",
+      "api": {
+        "base": "https://logging.googleapis.com/v2",
+        "path": "projects/{project}/metrics",
+        "method": "GET"
+      },
+      "response_path": "metrics",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Description", "json_path": "description", "width": 40 },
+        { "header": "Filter", "json_path": "filter", "width": 40 },
+        { "header": "Metric Kind", "json_path": "metricDescriptor.metricKind", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/metrics/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete log metric '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

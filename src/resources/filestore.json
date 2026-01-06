@@ -1,0 +1,50 @@
+{
+  "color_maps": {
+    "filestore_state": [
+      { "value": "READY", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "DELETING", "color": [255, 165, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] },
+      { "value": "RESTORING", "color": [0, 255, 255] },
+      { "value": "SUSPENDED", "color": [128, 128, 128] },
+      { "value": "REVERTING", "color": [255, 255, 0] }
+    ]
+  },
+  "resources": {
+    "filestore-instances": {
+      "display_name": "Filestore Instances",
+      "service": "file",
+      "api": {
+        "base": "https://file.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/instances",
+        "method": "GET"
+      },
+      "response_path": "instances",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 40 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "filestore_state" },
+        { "header": "Tier", "json_path": "tier", "width": 15 },
+        { "header": "Capacity (GB)", "json_path": "fileShares[0].capacityGb", "width": 13 },
+        { "header": "Share Name", "json_path": "fileShares[0].name", "width": 15 },
+        { "header": "Network", "json_path": "networks[0].network", "width": 20 },
+        { "header": "IP", "json_path": "networks[0].ipAddresses[0]", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Filestore instance?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

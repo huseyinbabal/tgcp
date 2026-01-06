@@ -1,0 +1,50 @@
+{
+  "color_maps": {
+    "status": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "ACTIVE", "color": [0, 255, 0] },
+      { "value": "READY", "color": [0, 255, 0] },
+      { "value": "HEALTHY", "color": [0, 255, 0] },
+      { "value": "UP", "color": [0, 255, 0] },
+      { "value": "STOPPED", "color": [255, 0, 0] },
+      { "value": "TERMINATED", "color": [255, 0, 0] },
+      { "value": "FAILED", "color": [255, 0, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] },
+      { "value": "DELETED", "color": [255, 0, 0] },
+      { "value": "UNHEALTHY", "color": [255, 0, 0] },
+      { "value": "DOWN", "color": [255, 0, 0] },
+      { "value": "PENDING", "color": [255, 255, 0] },
+      { "value": "STOPPING", "color": [255, 255, 0] },
+      { "value": "STARTING", "color": [255, 255, 0] },
+      { "value": "CREATING", "color": [255, 255, 0] },
+      { "value": "DELETING", "color": [255, 255, 0] },
+      { "value": "UPDATING", "color": [255, 255, 0] },
+      { "value": "PROVISIONING", "color": [255, 255, 0] },
+      { "value": "STAGING", "color": [255, 255, 0] },
+      { "value": "SUSPENDING", "color": [255, 255, 0] },
+      { "value": "SUSPENDED", "color": [255, 165, 0] },
+      { "value": "REPAIRING", "color": [255, 255, 0] },
+      { "value": "RECONCILING", "color": [255, 255, 0] }
+    ],
+    "bool": [
+      { "value": "true", "color": [0, 255, 255] },
+      { "value": "True", "color": [0, 255, 255] },
+      { "value": "TRUE", "color": [0, 255, 255] },
+      { "value": "Yes", "color": [0, 255, 255] },
+      { "value": "false", "color": [128, 128, 128] },
+      { "value": "False", "color": [128, 128, 128] },
+      { "value": "FALSE", "color": [128, 128, 128] },
+      { "value": "No", "color": [128, 128, 128] }
+    ],
+    "lifecycle": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "DEGRADED", "color": [255, 165, 0] },
+      { "value": "REPAIR", "color": [255, 255, 0] },
+      { "value": "RECONCILE", "color": [255, 255, 0] },
+      { "value": "STOPPING", "color": [255, 255, 0] },
+      { "value": "STOPPED", "color": [255, 0, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] }
+    ]
+  },
+  "resources": {}
+}

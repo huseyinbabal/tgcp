@@ -1,0 +1,212 @@
+{
+  "color_maps": {
+    "health_status": [
+      { "value": "HEALTHY", "color": [0, 255, 0] },
+      { "value": "UNHEALTHY", "color": [255, 0, 0] },
+      { "value": "UNKNOWN", "color": [255, 255, 0] }
+    ]
+  },
+  "resources": {
+    "forwarding-rules": {
+      "display_name": "Forwarding Rules",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/forwardingRules",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "IP Address", "json_path": "IPAddress", "width": 16 },
+        { "header": "Protocol", "json_path": "IPProtocol", "width": 10 },
+        { "header": "Port Range", "json_path": "portRange", "width": 12 },
+        { "header": "Target", "json_path": "target", "width": 35 },
+        { "header": "Load Balancing", "json_path": "loadBalancingScheme", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/forwardingRules/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete forwarding rule '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "regional-forwarding-rules": {
+      "display_name": "Regional Forwarding Rules",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/regions/{region}/forwardingRules",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "IP Address", "json_path": "IPAddress", "width": 16 },
+        { "header": "Protocol", "json_path": "IPProtocol", "width": 10 },
+        { "header": "Port Range", "json_path": "portRange", "width": 12 },
+        { "header": "Target", "json_path": "target", "width": 30 },
+        { "header": "Region", "json_path": "region", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/regions/{region}/forwardingRules/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete forwarding rule '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "backend-services": {
+      "display_name": "Backend Services",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/backendServices",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Protocol", "json_path": "protocol", "width": 10 },
+        { "header": "Port", "json_path": "port", "width": 8 },
+        { "header": "Timeout (s)", "json_path": "timeoutSec", "width": 11 },
+        { "header": "Health Check", "json_path": "healthChecks", "width": 35 },
+        { "header": "Backends", "json_path": "backends", "width": 10 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/backendServices/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete backend service '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "health-checks": {
+      "display_name": "Health Checks",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/healthChecks",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Type", "json_path": "type", "width": 10 },
+        { "header": "Port", "json_path": "httpHealthCheck.port", "width": 8 },
+        { "header": "Interval (s)", "json_path": "checkIntervalSec", "width": 12 },
+        { "header": "Timeout (s)", "json_path": "timeoutSec", "width": 11 },
+        { "header": "Healthy", "json_path": "healthyThreshold", "width": 8 },
+        { "header": "Unhealthy", "json_path": "unhealthyThreshold", "width": 9 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/healthChecks/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete health check '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "url-maps": {
+      "display_name": "URL Maps",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/urlMaps",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Default Service", "json_path": "defaultService", "width": 40 },
+        { "header": "Host Rules", "json_path": "hostRules", "width": 12 },
+        { "header": "Path Matchers", "json_path": "pathMatchers", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/urlMaps/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete URL map '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "ssl-certificates": {
+      "display_name": "SSL Certificates",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/sslCertificates",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Type", "json_path": "type", "width": 15 },
+        { "header": "Domains", "json_path": "subjectAlternativeNames", "width": 40 },
+        { "header": "Expires", "json_path": "expireTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/sslCertificates/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete SSL certificate '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

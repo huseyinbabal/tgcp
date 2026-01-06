@@ -1,0 +1,105 @@
+{
+  "color_maps": {
+    "cluster_status": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "UPDATING", "color": [255, 255, 0] },
+      { "value": "DELETING", "color": [255, 165, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] },
+      { "value": "STOPPED", "color": [128, 128, 128] }
+    ],
+    "job_status": [
+      { "value": "DONE", "color": [0, 255, 0] },
+      { "value": "RUNNING", "color": [0, 255, 255] },
+      { "value": "PENDING", "color": [255, 255, 0] },
+      { "value": "SETUP_DONE", "color": [255, 255, 0] },
+      { "value": "ERROR", "color": [255, 0, 0] },
+      { "value": "CANCELLED", "color": [128, 128, 128] }
+    ]
+  },
+  "resources": {
+    "dataproc-clusters": {
+      "display_name": "Dataproc Clusters",
+      "service": "dataproc",
+      "api": {
+        "base": "https://dataproc.googleapis.com/v1",
+        "path": "projects/{project}/regions/{region}/clusters",
+        "method": "GET"
+      },
+      "response_path": "clusters",
+      "id_field": "clusterUuid",
+      "name_field": "clusterName",
+      "columns": [
+        { "header": "Name", "json_path": "clusterName", "width": 25 },
+        { "header": "Status", "json_path": "status.state", "width": 12, "color_map": "cluster_status" },
+        { "header": "Region", "json_path": "labels.goog-dataproc-location", "width": 15 },
+        { "header": "Zone", "json_path": "config.gceClusterConfig.zoneUri", "width": 20 },
+        { "header": "Master", "json_path": "config.masterConfig.machineTypeUri", "width": 18 },
+        { "header": "Workers", "json_path": "config.workerConfig.numInstances", "width": 8 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/regions/{region}/clusters/{clusterName}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Dataproc cluster '{clusterName}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Stop",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/regions/{region}/clusters/{clusterName}:stop"
+          },
+          "shortcut": "x"
+        },
+        {
+          "display_name": "Start",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/regions/{region}/clusters/{clusterName}:start"
+          },
+          "shortcut": "s"
+        }
+      ]
+    },
+    "dataproc-jobs": {
+      "display_name": "Dataproc Jobs",
+      "service": "dataproc",
+      "api": {
+        "base": "https://dataproc.googleapis.com/v1",
+        "path": "projects/{project}/regions/{region}/jobs?pageSize=50",
+        "method": "GET"
+      },
+      "response_path": "jobs",
+      "id_field": "reference.jobId",
+      "name_field": "reference.jobId",
+      "columns": [
+        { "header": "Job ID", "json_path": "reference.jobId", "width": 38 },
+        { "header": "Status", "json_path": "status.state", "width": 12, "color_map": "job_status" },
+        { "header": "Type", "json_path": "sparkJob", "width": 12 },
+        { "header": "Cluster", "json_path": "placement.clusterName", "width": 20 },
+        { "header": "Submitted", "json_path": "status.stateStartTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Cancel",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/regions/{region}/jobs/{jobId}:cancel"
+          },
+          "shortcut": "c",
+          "confirm": {
+            "message": "Cancel Dataproc job?",
+            "destructive": false
+          }
+        }
+      ]
+    }
+  }
+}

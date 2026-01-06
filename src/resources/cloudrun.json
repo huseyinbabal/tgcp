@@ -1,0 +1,123 @@
+{
+  "color_maps": {
+    "service_status": [
+      { "value": "True", "color": [0, 255, 0] },
+      { "value": "False", "color": [255, 0, 0] },
+      { "value": "Unknown", "color": [255, 255, 0] }
+    ]
+  },
+  "resources": {
+    "cloudrun-services": {
+      "display_name": "Cloud Run Services",
+      "service": "run",
+      "api": {
+        "base": "https://run.googleapis.com/v2",
+        "path": "projects/{project}/locations/{region}/services",
+        "method": "GET"
+      },
+      "response_path": "services",
+      "id_field": "uid",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 35 },
+        { "header": "Region", "json_path": "labels.cloud.googleapis.com/location", "width": 15 },
+        { "header": "URL", "json_path": "uri", "width": 45 },
+        { "header": "Last Modified", "json_path": "updateTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Cloud Run service?",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "cloudrun-revisions",
+          "display_name": "Revisions",
+          "shortcut": "r",
+          "parent_id_field": "name",
+          "filter_param": "service"
+        }
+      ]
+    },
+    "cloudrun-revisions": {
+      "display_name": "Cloud Run Revisions",
+      "service": "run",
+      "api": {
+        "base": "https://run.googleapis.com/v2",
+        "path": "projects/{project}/locations/{region}/services/{service}/revisions",
+        "method": "GET"
+      },
+      "response_path": "revisions",
+      "id_field": "uid",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "Image", "json_path": "containers[0].image", "width": 40 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Cloud Run revision?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "cloudrun-jobs": {
+      "display_name": "Cloud Run Jobs",
+      "service": "run",
+      "api": {
+        "base": "https://run.googleapis.com/v2",
+        "path": "projects/{project}/locations/{region}/jobs",
+        "method": "GET"
+      },
+      "response_path": "jobs",
+      "id_field": "uid",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 35 },
+        { "header": "Region", "json_path": "labels.cloud.googleapis.com/location", "width": 15 },
+        { "header": "Last Execution", "json_path": "latestCreatedExecution.name", "width": 35 },
+        { "header": "Updated", "json_path": "updateTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Run",
+          "api": {
+            "method": "POST",
+            "path": "{name}:run"
+          },
+          "shortcut": "r"
+        },
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Cloud Run job?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

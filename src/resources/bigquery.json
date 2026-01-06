@@ -1,0 +1,114 @@
+{
+  "resources": {
+    "bq-datasets": {
+      "display_name": "BigQuery Datasets",
+      "service": "bigquery",
+      "api": {
+        "base": "https://bigquery.googleapis.com/bigquery/v2",
+        "path": "projects/{project}/datasets",
+        "method": "GET"
+      },
+      "response_path": "datasets",
+      "id_field": "id",
+      "name_field": "datasetReference.datasetId",
+      "columns": [
+        { "header": "Dataset ID", "json_path": "datasetReference.datasetId", "width": 30 },
+        { "header": "Location", "json_path": "location", "width": 15 },
+        { "header": "Created", "json_path": "creationTime", "width": 15 },
+        { "header": "Modified", "json_path": "lastModifiedTime", "width": 15 },
+        { "header": "Labels", "json_path": "labels", "width": 20 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/datasets/{datasetId}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete dataset? All tables will be deleted!",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "bq-tables",
+          "display_name": "Tables",
+          "shortcut": "t",
+          "parent_id_field": "datasetReference.datasetId",
+          "filter_param": "dataset"
+        }
+      ]
+    },
+    "bq-tables": {
+      "display_name": "BigQuery Tables",
+      "service": "bigquery",
+      "api": {
+        "base": "https://bigquery.googleapis.com/bigquery/v2",
+        "path": "projects/{project}/datasets/{dataset}/tables",
+        "method": "GET"
+      },
+      "response_path": "tables",
+      "id_field": "id",
+      "name_field": "tableReference.tableId",
+      "columns": [
+        { "header": "Table ID", "json_path": "tableReference.tableId", "width": 30 },
+        { "header": "Type", "json_path": "type", "width": 12 },
+        { "header": "Rows", "json_path": "numRows", "width": 12 },
+        { "header": "Size (bytes)", "json_path": "numBytes", "width": 15 },
+        { "header": "Created", "json_path": "creationTime", "width": 15 },
+        { "header": "Expires", "json_path": "expirationTime", "width": 15 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/datasets/{dataset}/tables/{tableId}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete table?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "bq-jobs": {
+      "display_name": "BigQuery Jobs",
+      "service": "bigquery",
+      "api": {
+        "base": "https://bigquery.googleapis.com/bigquery/v2",
+        "path": "projects/{project}/jobs?projection=full&maxResults=50",
+        "method": "GET"
+      },
+      "response_path": "jobs",
+      "id_field": "jobReference.jobId",
+      "name_field": "jobReference.jobId",
+      "columns": [
+        { "header": "Job ID", "json_path": "jobReference.jobId", "width": 35 },
+        { "header": "State", "json_path": "status.state", "width": 10 },
+        { "header": "Type", "json_path": "configuration.jobType", "width": 10 },
+        { "header": "User", "json_path": "user_email", "width": 25 },
+        { "header": "Created", "json_path": "statistics.creationTime", "width": 15 },
+        { "header": "Duration (ms)", "json_path": "statistics.totalSlotMs", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Cancel",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/jobs/{jobId}/cancel"
+          },
+          "shortcut": "c",
+          "confirm": {
+            "message": "Cancel job?",
+            "destructive": false
+          }
+        }
+      ]
+    }
+  }
+}

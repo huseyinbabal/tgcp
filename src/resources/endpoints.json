@@ -1,0 +1,34 @@
+{
+  "resources": {
+    "endpoints-services": {
+      "display_name": "Cloud Endpoints Services",
+      "service": "servicemanagement",
+      "api": {
+        "base": "https://servicemanagement.googleapis.com/v1",
+        "path": "services?producerProjectId={project}",
+        "method": "GET"
+      },
+      "response_path": "services",
+      "id_field": "serviceName",
+      "name_field": "serviceName",
+      "columns": [
+        { "header": "Service Name", "json_path": "serviceName", "width": 50 },
+        { "header": "Producer Project", "json_path": "producerProjectId", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "services/{serviceName}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Endpoints service '{serviceName}'?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

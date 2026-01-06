@@ -1,0 +1,37 @@
+{
+  "resources": {
+    "buckets": {
+      "display_name": "Storage Buckets",
+      "service": "storage",
+      "api": {
+        "base": "https://storage.googleapis.com/storage/v1",
+        "path": "b?project={project}",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 35 },
+        { "header": "Location", "json_path": "location", "width": 15 },
+        { "header": "Storage Class", "json_path": "storageClass", "width": 15 },
+        { "header": "Public Access", "json_path": "iamConfiguration.publicAccessPrevention", "width": 15 },
+        { "header": "Created", "json_path": "timeCreated", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "b/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete bucket '{name}'? This will fail if bucket is not empty.",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

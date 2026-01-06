@@ -1,0 +1,258 @@
+{
+  "color_maps": {
+    "vm_status": [
+      { "value": "RUNNING", "color": [0, 255, 0] },
+      { "value": "STAGING", "color": [0, 255, 255] },
+      { "value": "PROVISIONING", "color": [0, 255, 255] },
+      { "value": "STOPPING", "color": [255, 165, 0] },
+      { "value": "SUSPENDING", "color": [255, 165, 0] },
+      { "value": "SUSPENDED", "color": [255, 200, 0] },
+      { "value": "REPAIRING", "color": [255, 165, 0] },
+      { "value": "TERMINATED", "color": [128, 128, 128] }
+    ],
+    "disk_status": [
+      { "value": "READY", "color": [0, 255, 0] },
+      { "value": "CREATING", "color": [0, 255, 255] },
+      { "value": "RESTORING", "color": [0, 255, 255] },
+      { "value": "FAILED", "color": [255, 0, 0] },
+      { "value": "DELETING", "color": [255, 165, 0] }
+    ]
+  },
+  "resources": {
+    "vm-instances": {
+      "display_name": "VM Instances",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/zones/{zone}/instances",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "Status", "json_path": "status", "width": 12, "color_map": "vm_status" },
+        { "header": "Machine Type", "json_path": "machineType", "width": 18 },
+        { "header": "Zone", "json_path": "zone", "width": 18 },
+        { "header": "Internal IP", "json_path": "networkInterfaces[0].networkIP", "width": 14 },
+        { "header": "External IP", "json_path": "networkInterfaces[0].accessConfigs[0].natIP", "width": 13 }
+      ],
+      "actions": [
+        {
+          "display_name": "Start",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/instances/{name}/start"
+          },
+          "shortcut": "s",
+          "confirm": {
+            "message": "Start instance '{name}'?",
+            "destructive": false
+          }
+        },
+        {
+          "display_name": "Stop",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/instances/{name}/stop"
+          },
+          "shortcut": "x",
+          "confirm": {
+            "message": "Stop instance '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Reset",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/instances/{name}/reset"
+          },
+          "shortcut": "R",
+          "confirm": {
+            "message": "Reset instance '{name}'? This is a hard reset.",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Suspend",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/instances/{name}/suspend"
+          },
+          "shortcut": "S",
+          "confirm": {
+            "message": "Suspend instance '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Resume",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/instances/{name}/resume"
+          },
+          "shortcut": "e",
+          "confirm": {
+            "message": "Resume instance '{name}'?",
+            "destructive": false
+          }
+        },
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/zones/{zone}/instances/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete instance '{name}'? This action cannot be undone.",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "disks",
+          "display_name": "Attached Disks",
+          "shortcut": "a",
+          "parent_id_field": "name",
+          "filter_param": "instance"
+        }
+      ]
+    },
+    "disks": {
+      "display_name": "Disks",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/zones/{zone}/disks",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "Status", "json_path": "status", "width": 12, "color_map": "disk_status" },
+        { "header": "Size (GB)", "json_path": "sizeGb", "width": 10 },
+        { "header": "Type", "json_path": "type", "width": 18 },
+        { "header": "Zone", "json_path": "zone", "width": 18 },
+        { "header": "Users", "json_path": "users", "width": 17 }
+      ],
+      "actions": [
+        {
+          "display_name": "Create Snapshot",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/disks/{name}/createSnapshot"
+          },
+          "shortcut": "c"
+        },
+        {
+          "display_name": "Resize",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/zones/{zone}/disks/{name}/resize"
+          },
+          "shortcut": "r"
+        }
+      ]
+    },
+    "snapshots": {
+      "display_name": "Snapshots",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/snapshots",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Status", "json_path": "status", "width": 12, "color_map": "disk_status" },
+        { "header": "Size (GB)", "json_path": "diskSizeGb", "width": 10 },
+        { "header": "Source Disk", "json_path": "sourceDisk", "width": 25 },
+        { "header": "Created", "json_path": "creationTimestamp", "width": 23 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/snapshots/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete snapshot '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "images": {
+      "display_name": "Images",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/global/images",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 35 },
+        { "header": "Status", "json_path": "status", "width": 10 },
+        { "header": "Disk Size (GB)", "json_path": "diskSizeGb", "width": 14 },
+        { "header": "Family", "json_path": "family", "width": 20 },
+        { "header": "Created", "json_path": "creationTimestamp", "width": 21 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/global/images/{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete image '{name}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Deprecate",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/global/images/{name}/deprecate"
+          },
+          "shortcut": "e"
+        }
+      ]
+    },
+    "machine-types": {
+      "display_name": "Machine Types",
+      "service": "compute",
+      "api": {
+        "base": "https://compute.googleapis.com/compute/v1",
+        "path": "projects/{project}/zones/{zone}/machineTypes",
+        "method": "GET"
+      },
+      "response_path": "items",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 25 },
+        { "header": "vCPUs", "json_path": "guestCpus", "width": 8 },
+        { "header": "Memory (MB)", "json_path": "memoryMb", "width": 12 },
+        { "header": "Max Disks", "json_path": "maximumPersistentDisks", "width": 10 },
+        { "header": "Max Disk Size (GB)", "json_path": "maximumPersistentDisksSizeGb", "width": 18 },
+        { "header": "Zone", "json_path": "zone", "width": 18 }
+      ]
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "resources": {
+    "artifact-repos": {
+      "display_name": "Artifact Registry Repos",
+      "service": "artifactregistry",
+      "api": {
+        "base": "https://artifactregistry.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/repositories",
+        "method": "GET"
+      },
+      "response_path": "repositories",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 50 },
+        { "header": "Format", "json_path": "format", "width": 12 },
+        { "header": "Mode", "json_path": "mode", "width": 15 },
+        { "header": "Size (bytes)", "json_path": "sizeBytes", "width": 15 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete repository? All artifacts will be deleted!",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "docker-images": {
+      "display_name": "Docker Images",
+      "service": "artifactregistry",
+      "api": {
+        "base": "https://artifactregistry.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/repositories/{repository}/dockerImages",
+        "method": "GET"
+      },
+      "response_path": "dockerImages",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 60 },
+        { "header": "Tags", "json_path": "tags", "width": 20 },
+        { "header": "Size (bytes)", "json_path": "imageSizeBytes", "width": 15 },
+        { "header": "Uploaded", "json_path": "uploadTime", "width": 22 },
+        { "header": "Media Type", "json_path": "mediaType", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete Docker image?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

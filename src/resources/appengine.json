@@ -1,0 +1,101 @@
+{
+  "color_maps": {
+    "serving_status": [
+      { "value": "SERVING", "color": [0, 255, 0] },
+      { "value": "STOPPED", "color": [128, 128, 128] }
+    ]
+  },
+  "resources": {
+    "appengine-services": {
+      "display_name": "App Engine Services",
+      "service": "appengine",
+      "api": {
+        "base": "https://appengine.googleapis.com/v1",
+        "path": "apps/{project}/services",
+        "method": "GET"
+      },
+      "response_path": "services",
+      "id_field": "id",
+      "name_field": "id",
+      "columns": [
+        { "header": "Service ID", "json_path": "id", "width": 25 },
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "Traffic Split", "json_path": "split.allocations", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "apps/{project}/services/{id}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete App Engine service '{id}'?",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "appengine-versions",
+          "display_name": "Versions",
+          "shortcut": "v",
+          "parent_id_field": "id",
+          "filter_param": "service"
+        }
+      ]
+    },
+    "appengine-versions": {
+      "display_name": "App Engine Versions",
+      "service": "appengine",
+      "api": {
+        "base": "https://appengine.googleapis.com/v1",
+        "path": "apps/{project}/services/{service}/versions",
+        "method": "GET"
+      },
+      "response_path": "versions",
+      "id_field": "id",
+      "name_field": "id",
+      "columns": [
+        { "header": "Version ID", "json_path": "id", "width": 20 },
+        { "header": "Status", "json_path": "servingStatus", "width": 10, "color_map": "serving_status" },
+        { "header": "Runtime", "json_path": "runtime", "width": 12 },
+        { "header": "Environment", "json_path": "env", "width": 12 },
+        { "header": "Instances", "json_path": "automaticScaling.minIdleInstances", "width": 10 },
+        { "header": "Created", "json_path": "createTime", "width": 22 },
+        { "header": "Created By", "json_path": "createdBy", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "apps/{project}/services/{service}/versions/{id}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete App Engine version '{id}'?",
+            "destructive": true
+          }
+        },
+        {
+          "display_name": "Start",
+          "api": {
+            "method": "PATCH",
+            "path": "apps/{project}/services/{service}/versions/{id}?updateMask=servingStatus"
+          },
+          "shortcut": "s"
+        },
+        {
+          "display_name": "Stop",
+          "api": {
+            "method": "PATCH",
+            "path": "apps/{project}/services/{service}/versions/{id}?updateMask=servingStatus"
+          },
+          "shortcut": "x"
+        }
+      ]
+    }
+  }
+}

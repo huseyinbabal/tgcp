@@ -1,0 +1,131 @@
+{
+  "color_maps": {
+    "key_state": [
+      { "value": "ENABLED", "color": [0, 255, 0] },
+      { "value": "DISABLED", "color": [128, 128, 128] },
+      { "value": "PENDING_GENERATION", "color": [0, 255, 255] },
+      { "value": "PENDING_IMPORT", "color": [0, 255, 255] },
+      { "value": "IMPORT_FAILED", "color": [255, 0, 0] },
+      { "value": "GENERATION_FAILED", "color": [255, 0, 0] },
+      { "value": "PENDING_EXTERNAL_DESTRUCTION", "color": [255, 165, 0] },
+      { "value": "EXTERNAL_DESTRUCTION_FAILED", "color": [255, 0, 0] },
+      { "value": "DESTROYED", "color": [255, 0, 0] },
+      { "value": "DESTROY_SCHEDULED", "color": [255, 165, 0] }
+    ]
+  },
+  "resources": {
+    "kms-keyrings": {
+      "display_name": "KMS Key Rings",
+      "service": "cloudkms",
+      "api": {
+        "base": "https://cloudkms.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/keyRings",
+        "method": "GET"
+      },
+      "response_path": "keyRings",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 60 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "kms-keys",
+          "display_name": "Crypto Keys",
+          "shortcut": "k",
+          "parent_id_field": "name",
+          "filter_param": "keyRing"
+        }
+      ]
+    },
+    "kms-keys": {
+      "display_name": "KMS Crypto Keys",
+      "service": "cloudkms",
+      "api": {
+        "base": "https://cloudkms.googleapis.com/v1",
+        "path": "{keyRing}/cryptoKeys",
+        "method": "GET"
+      },
+      "response_path": "cryptoKeys",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 55 },
+        { "header": "Purpose", "json_path": "purpose", "width": 20 },
+        { "header": "Algorithm", "json_path": "versionTemplate.algorithm", "width": 25 },
+        { "header": "Protection", "json_path": "versionTemplate.protectionLevel", "width": 12 },
+        { "header": "Rotation", "json_path": "rotationPeriod", "width": 15 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Rotate",
+          "api": {
+            "method": "POST",
+            "path": "{name}:updatePrimaryVersion"
+          },
+          "shortcut": "r"
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "kms-key-versions",
+          "display_name": "Versions",
+          "shortcut": "v",
+          "parent_id_field": "name",
+          "filter_param": "cryptoKey"
+        }
+      ]
+    },
+    "kms-key-versions": {
+      "display_name": "KMS Key Versions",
+      "service": "cloudkms",
+      "api": {
+        "base": "https://cloudkms.googleapis.com/v1",
+        "path": "{cryptoKey}/cryptoKeyVersions",
+        "method": "GET"
+      },
+      "response_path": "cryptoKeyVersions",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 65 },
+        { "header": "State", "json_path": "state", "width": 15, "color_map": "key_state" },
+        { "header": "Protection", "json_path": "protectionLevel", "width": 12 },
+        { "header": "Algorithm", "json_path": "algorithm", "width": 25 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Disable",
+          "api": {
+            "method": "PATCH",
+            "path": "{name}?updateMask=state"
+          },
+          "shortcut": "x"
+        },
+        {
+          "display_name": "Enable",
+          "api": {
+            "method": "PATCH",
+            "path": "{name}?updateMask=state"
+          },
+          "shortcut": "e"
+        },
+        {
+          "display_name": "Destroy",
+          "api": {
+            "method": "POST",
+            "path": "{name}:destroy"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Schedule key version for destruction? This cannot be undone!",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}

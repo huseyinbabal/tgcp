@@ -1,0 +1,91 @@
+{
+  "color_maps": {
+    "workflow_state": [
+      { "value": "ACTIVE", "color": [0, 255, 0] },
+      { "value": "UNAVAILABLE", "color": [128, 128, 128] }
+    ],
+    "execution_state": [
+      { "value": "SUCCEEDED", "color": [0, 255, 0] },
+      { "value": "ACTIVE", "color": [0, 255, 255] },
+      { "value": "FAILED", "color": [255, 0, 0] },
+      { "value": "CANCELLED", "color": [128, 128, 128] }
+    ]
+  },
+  "resources": {
+    "workflows": {
+      "display_name": "Workflows",
+      "service": "workflows",
+      "api": {
+        "base": "https://workflows.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/workflows",
+        "method": "GET"
+      },
+      "response_path": "workflows",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 45 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "workflow_state" },
+        { "header": "Revision", "json_path": "revisionId", "width": 12 },
+        { "header": "Service Account", "json_path": "serviceAccount", "width": 35 },
+        { "header": "Updated", "json_path": "updateTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete workflow?",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "workflow-executions",
+          "display_name": "Executions",
+          "shortcut": "e",
+          "parent_id_field": "name",
+          "filter_param": "workflow"
+        }
+      ]
+    },
+    "workflow-executions": {
+      "display_name": "Workflow Executions",
+      "service": "workflows",
+      "api": {
+        "base": "https://workflowexecutions.googleapis.com/v1",
+        "path": "{workflow}/executions",
+        "method": "GET"
+      },
+      "response_path": "executions",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 55 },
+        { "header": "State", "json_path": "state", "width": 12, "color_map": "execution_state" },
+        { "header": "Started", "json_path": "startTime", "width": 22 },
+        { "header": "Ended", "json_path": "endTime", "width": 22 },
+        { "header": "Duration", "json_path": "duration", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Cancel",
+          "api": {
+            "method": "POST",
+            "path": "{name}:cancel"
+          },
+          "shortcut": "c",
+          "confirm": {
+            "message": "Cancel workflow execution?",
+            "destructive": false
+          }
+        }
+      ]
+    }
+  }
+}

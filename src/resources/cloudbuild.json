@@ -1,0 +1,100 @@
+{
+  "color_maps": {
+    "build_status": [
+      { "value": "SUCCESS", "color": [0, 255, 0] },
+      { "value": "WORKING", "color": [0, 255, 255] },
+      { "value": "QUEUED", "color": [255, 255, 0] },
+      { "value": "PENDING", "color": [255, 255, 0] },
+      { "value": "FAILURE", "color": [255, 0, 0] },
+      { "value": "INTERNAL_ERROR", "color": [255, 0, 0] },
+      { "value": "TIMEOUT", "color": [255, 165, 0] },
+      { "value": "CANCELLED", "color": [128, 128, 128] }
+    ]
+  },
+  "resources": {
+    "build-triggers": {
+      "display_name": "Cloud Build Triggers",
+      "service": "cloudbuild",
+      "api": {
+        "base": "https://cloudbuild.googleapis.com/v1",
+        "path": "projects/{project}/triggers",
+        "method": "GET"
+      },
+      "response_path": "triggers",
+      "id_field": "id",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 30 },
+        { "header": "Description", "json_path": "description", "width": 35 },
+        { "header": "Disabled", "json_path": "disabled", "width": 8 },
+        { "header": "Repo", "json_path": "github.name", "width": 25 },
+        { "header": "Branch", "json_path": "github.push.branch", "width": 15 },
+        { "header": "Created", "json_path": "createTime", "width": 22 }
+      ],
+      "actions": [
+        {
+          "display_name": "Run",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/triggers/{id}:run"
+          },
+          "shortcut": "r"
+        },
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "projects/{project}/triggers/{id}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete build trigger '{name}'?",
+            "destructive": true
+          }
+        }
+      ]
+    },
+    "builds": {
+      "display_name": "Cloud Builds",
+      "service": "cloudbuild",
+      "api": {
+        "base": "https://cloudbuild.googleapis.com/v1",
+        "path": "projects/{project}/builds?pageSize=50",
+        "method": "GET"
+      },
+      "response_path": "builds",
+      "id_field": "id",
+      "name_field": "id",
+      "columns": [
+        { "header": "Build ID", "json_path": "id", "width": 38 },
+        { "header": "Status", "json_path": "status", "width": 12, "color_map": "build_status" },
+        { "header": "Trigger", "json_path": "buildTriggerId", "width": 20 },
+        { "header": "Source", "json_path": "source.repoSource.repoName", "width": 25 },
+        { "header": "Started", "json_path": "startTime", "width": 22 },
+        { "header": "Duration", "json_path": "timing.BUILD.endTime", "width": 12 }
+      ],
+      "actions": [
+        {
+          "display_name": "Cancel",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/builds/{id}:cancel"
+          },
+          "shortcut": "c",
+          "confirm": {
+            "message": "Cancel build?",
+            "destructive": false
+          }
+        },
+        {
+          "display_name": "Retry",
+          "api": {
+            "method": "POST",
+            "path": "projects/{project}/builds/{id}:retry"
+          },
+          "shortcut": "R"
+        }
+      ]
+    }
+  }
+}

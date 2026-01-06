@@ -1,0 +1,114 @@
+{
+  "resources": {
+    "sd-namespaces": {
+      "display_name": "Service Directory Namespaces",
+      "service": "servicedirectory",
+      "api": {
+        "base": "https://servicedirectory.googleapis.com/v1",
+        "path": "projects/{project}/locations/{region}/namespaces",
+        "method": "GET"
+      },
+      "response_path": "namespaces",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 55 },
+        { "header": "Labels", "json_path": "labels", "width": 30 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete namespace? All services will be deleted!",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "sd-services",
+          "display_name": "Services",
+          "shortcut": "s",
+          "parent_id_field": "name",
+          "filter_param": "namespace"
+        }
+      ]
+    },
+    "sd-services": {
+      "display_name": "Service Directory Services",
+      "service": "servicedirectory",
+      "api": {
+        "base": "https://servicedirectory.googleapis.com/v1",
+        "path": "{namespace}/services",
+        "method": "GET"
+      },
+      "response_path": "services",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 60 },
+        { "header": "Annotations", "json_path": "annotations", "width": 30 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete service?",
+            "destructive": true
+          }
+        }
+      ],
+      "sub_resources": [
+        {
+          "resource_key": "sd-endpoints",
+          "display_name": "Endpoints",
+          "shortcut": "e",
+          "parent_id_field": "name",
+          "filter_param": "service"
+        }
+      ]
+    },
+    "sd-endpoints": {
+      "display_name": "Service Directory Endpoints",
+      "service": "servicedirectory",
+      "api": {
+        "base": "https://servicedirectory.googleapis.com/v1",
+        "path": "{service}/endpoints",
+        "method": "GET"
+      },
+      "response_path": "endpoints",
+      "id_field": "name",
+      "name_field": "name",
+      "columns": [
+        { "header": "Name", "json_path": "name", "width": 65 },
+        { "header": "Address", "json_path": "address", "width": 20 },
+        { "header": "Port", "json_path": "port", "width": 8 },
+        { "header": "Annotations", "json_path": "annotations", "width": 25 }
+      ],
+      "actions": [
+        {
+          "display_name": "Delete",
+          "api": {
+            "method": "DELETE",
+            "path": "{name}"
+          },
+          "shortcut": "ctrl+d",
+          "confirm": {
+            "message": "Delete endpoint?",
+            "destructive": true
+          }
+        }
+      ]
+    }
+  }
+}
