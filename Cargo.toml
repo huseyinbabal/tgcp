@@ -28,7 +28,7 @@ serde_yaml = "0.9"
 
 # Utils
 anyhow = "1.0"
-thiserror = "1.0"
+thiserror = "2.0"
 dirs = "5.0"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4.4", features = ["derive"] }
