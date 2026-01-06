@@ -13,7 +13,7 @@ authors = ["Huseyin Babal"]
 
 [dependencies]
 # TUI
-ratatui = "0.26"
+ratatui = "0.30"
 crossterm = "0.27"
 
 # HTTP Client
