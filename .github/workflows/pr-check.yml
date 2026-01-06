@@ -8,6 +8,7 @@ jobs:
   check-issue-link:
     name: Check Issue Link
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Check PR description for issue link
         uses: actions/github-script@v8
