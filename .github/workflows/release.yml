@@ -245,7 +245,6 @@ jobs:
   scoop:
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ secrets.SCOOP_BUCKET_TOKEN != '' }}
     steps:
       - name: Download Windows artifact
         uses: actions/download-artifact@v7
