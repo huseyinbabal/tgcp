@@ -134,7 +134,6 @@ jobs:
   publish-crates:
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ secrets.CRATES_IO_TOKEN != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -164,7 +163,6 @@ jobs:
   homebrew:
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ secrets.HOMEBREW_TAP_TOKEN != '' }}
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
