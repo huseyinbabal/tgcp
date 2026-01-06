@@ -38,5 +38,5 @@ tracing-appender = "0.2"
 open = "5.0"
 
 # Auth (JWT signing for service accounts)
-jsonwebtoken = "9"
+jsonwebtoken = "10"
 base64 = "0.21"
