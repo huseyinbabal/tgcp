@@ -43,7 +43,7 @@ jobs:
           tar -czf ../../../tgcp-${{ matrix.target }}.tar.gz tgcp
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: tgcp-${{ matrix.target }}
           path: tgcp-${{ matrix.target }}.tar.gz
@@ -75,7 +75,7 @@ jobs:
           tar -czf ../../../tgcp-${{ matrix.target }}.tar.gz tgcp
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: tgcp-${{ matrix.target }}
           path: tgcp-${{ matrix.target }}.tar.gz
@@ -102,7 +102,7 @@ jobs:
           7z a ../../../tgcp-x86_64-pc-windows-msvc.zip tgcp.exe
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: tgcp-x86_64-pc-windows-msvc
           path: tgcp-x86_64-pc-windows-msvc.zip
