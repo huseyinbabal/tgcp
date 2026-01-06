@@ -39,4 +39,4 @@ open = "5.0"
 
 # Auth (JWT signing for service accounts)
 jsonwebtoken = "9"
-base64 = "0.21"
+base64 = "0.22"
