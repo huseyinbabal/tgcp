@@ -38,5 +38,11 @@ tracing-appender = "0.2"
 open = "5.0"
 
 # Auth (JWT signing for service accounts)
-jsonwebtoken = "10"
+jsonwebtoken = { version = "10", features = ["rust_crypto"] }
 base64 = "0.22"
+
+[profile.release]
+codegen-units = 1  # Allows compiler to perform better optimization
+lto = true         # Enables Link-time Optimization
+opt-level = "s"    # Prioritizes small binary size with good performance
+strip = true       # Ensures debug symbols are removed
