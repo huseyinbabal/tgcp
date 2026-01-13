@@ -1,6 +1,6 @@
 [package]
 name = "tgcp"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 description = "Terminal UI for GCP - navigate, observe, and manage GCP resources"
 license = "MIT"
