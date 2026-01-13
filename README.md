@@ -59,8 +59,8 @@ Download the latest release from the [Releases page](https://github.com/huseyinb
 |----------|--------------|----------|
 | **macOS** | Apple Silicon (M1/M2/M3) | `tgcp-aarch64-apple-darwin.tar.gz` |
 | **macOS** | Intel | `tgcp-x86_64-apple-darwin.tar.gz` |
-| **Linux** | x86_64 | `tgcp-x86_64-unknown-linux-gnu.tar.gz` |
-| **Linux** | ARM64 | `tgcp-aarch64-unknown-linux-gnu.tar.gz` |
+| **Linux** | x86_64 (musl) | `tgcp-x86_64-unknown-linux-musl.tar.gz` |
+| **Linux** | ARM64 (musl) | `tgcp-aarch64-unknown-linux-musl.tar.gz` |
 | **Windows** | x86_64 | `tgcp-x86_64-pc-windows-msvc.zip` |
 
 #### Quick Install (macOS/Linux)
@@ -74,12 +74,12 @@ sudo mv tgcp /usr/local/bin/
 curl -sL https://github.com/huseyinbabal/tgcp/releases/latest/download/tgcp-x86_64-apple-darwin.tar.gz | tar xz
 sudo mv tgcp /usr/local/bin/
 
-# Linux x86_64
-curl -sL https://github.com/huseyinbabal/tgcp/releases/latest/download/tgcp-x86_64-unknown-linux-gnu.tar.gz | tar xz
+# Linux x86_64 (musl - works on Alpine, Void, etc.)
+curl -sL https://github.com/huseyinbabal/tgcp/releases/latest/download/tgcp-x86_64-unknown-linux-musl.tar.gz | tar xz
 sudo mv tgcp /usr/local/bin/
 
-# Linux ARM64
-curl -sL https://github.com/huseyinbabal/tgcp/releases/latest/download/tgcp-aarch64-unknown-linux-gnu.tar.gz | tar xz
+# Linux ARM64 (musl - works on Alpine, Void, etc.)
+curl -sL https://github.com/huseyinbabal/tgcp/releases/latest/download/tgcp-aarch64-unknown-linux-musl.tar.gz | tar xz
 sudo mv tgcp /usr/local/bin/
 ```
 
@@ -94,6 +94,40 @@ sudo mv tgcp /usr/local/bin/
 ```bash
 cargo install tgcp
 ```
+
+### Using Docker
+
+```bash
+# Run interactively
+docker run --rm -it ghcr.io/huseyinbabal/tgcp
+
+# Launch with GCP credentials (mount gcloud config)
+docker run --rm -it \
+  -v ~/.config/gcloud:/root/.config/gcloud:ro \
+  ghcr.io/huseyinbabal/tgcp
+
+# Launch in a specific zone
+docker run --rm -it \
+  -v ~/.config/gcloud:/root/.config/gcloud:ro \
+  ghcr.io/huseyinbabal/tgcp --zone us-central1-a
+
+# Using service account JSON
+docker run --rm -it \
+  -v /path/to/service-account.json:/credentials.json:ro \
+  -e GOOGLE_APPLICATION_CREDENTIALS=/credentials.json \
+  ghcr.io/huseyinbabal/tgcp
+
+# Using environment variables
+docker run --rm -it \
+  -e GCP_ACCESS_TOKEN=$GCP_ACCESS_TOKEN \
+  ghcr.io/huseyinbabal/tgcp
+
+# Build locally
+docker build -t tgcp .
+docker run --rm -it -v ~/.config/gcloud:/root/.config/gcloud:ro tgcp
+```
+
+> **Note:** Use `-it` flags for interactive terminal support (required for TUI). Mount your `~/.config/gcloud` directory as read-only to use your existing GCP credentials.
 
 ### From Source
 
