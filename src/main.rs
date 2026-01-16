@@ -69,9 +69,7 @@ impl LogLevel {
 }
 
 fn setup_logging(level: LogLevel) -> Option<tracing_appender::non_blocking::WorkerGuard> {
-    let Some(tracing_level) = level.to_tracing_level() else {
-        return None;
-    };
+    let tracing_level = level.to_tracing_level()?;
 
     // Get log file path
     let log_path = get_log_path();
@@ -146,7 +144,11 @@ async fn main() -> Result<()> {
 
     // Load config
     let config = Config::load();
-    tracing::info!("Config loaded: project={:?}, zone={:?}", config.project, config.zone);
+    tracing::info!(
+        "Config loaded: project={:?}, zone={:?}",
+        config.project,
+        config.zone
+    );
 
     // Determine effective zone: CLI arg > config > default
     let effective_zone = args.zone.or_else(|| Some(config.effective_zone()));
@@ -231,6 +233,13 @@ async fn run_app(
         if event::poll(Duration::from_millis(100))? {
             if let Event::Key(key) = event::read()? {
                 tracing::trace!("Key event: {:?}", key);
+
+                // Global Ctrl+C handler - quit from any mode
+                if key.modifiers.contains(KeyModifiers::CONTROL) && key.code == KeyCode::Char('c') {
+                    tracing::info!("Ctrl+C pressed, quitting");
+                    break;
+                }
+
                 // Handle key events based on current mode
                 match app.mode {
                     Mode::Normal => {
@@ -270,11 +279,6 @@ async fn run_app(
 }
 
 async fn handle_normal_mode(app: &mut App, code: KeyCode, modifiers: KeyModifiers) -> bool {
-    // Check for Ctrl+C to quit
-    if modifiers.contains(KeyModifiers::CONTROL) && code == KeyCode::Char('c') {
-        return true;
-    }
-
     // Check for Ctrl+D for delete/destructive action
     if modifiers.contains(KeyModifiers::CONTROL) && code == KeyCode::Char('d') {
         let shortcut = "ctrl+d".to_string();
@@ -288,8 +292,6 @@ async fn handle_normal_mode(app: &mut App, code: KeyCode, modifiers: KeyModifier
         }
         return false;
     }
-
-
 
     match code {
         KeyCode::Char('q') => return true,
@@ -363,10 +365,14 @@ async fn handle_normal_mode(app: &mut App, code: KeyCode, modifiers: KeyModifier
                 }
             } else if let KeyCode::Char(c) = code {
                 let shortcut = c.to_string();
-                
+
                 // First check if this is a sub-resource shortcut
                 if let Some(sub_resource_key) = app.find_sub_resource_by_shortcut(&shortcut) {
-                    tracing::info!("Sub-resource shortcut '{}' triggered -> {}", shortcut, sub_resource_key);
+                    tracing::info!(
+                        "Sub-resource shortcut '{}' triggered -> {}",
+                        shortcut,
+                        sub_resource_key
+                    );
                     app.navigate_to_sub_resource(&sub_resource_key).await;
                 }
                 // Then check if this is an action shortcut

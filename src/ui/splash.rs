@@ -40,7 +40,7 @@ impl Default for SplashState {
 }
 
 pub fn render(f: &mut Frame, splash: &SplashState) {
-    let area = f.size();
+    let area = f.area();
 
     // Center everything vertically
     let vertical = Layout::default()

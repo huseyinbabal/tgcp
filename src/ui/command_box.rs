@@ -8,7 +8,7 @@ use ratatui::{
 };
 
 pub fn render(f: &mut Frame, app: &App) {
-    let area = centered_rect(50, 40, f.size());
+    let area = centered_rect(50, 40, f.area());
 
     f.render_widget(Clear, area);
 

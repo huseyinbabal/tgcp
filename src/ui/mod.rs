@@ -27,7 +27,7 @@ pub fn render(f: &mut Frame, app: &App) {
             Constraint::Min(1),    // Main content (table or describe)
             Constraint::Length(1), // Footer/crumb
         ])
-        .split(f.size());
+        .split(f.area());
 
     // Header - multi-line with context info
     header::render(f, app, chunks[0]);
@@ -168,7 +168,7 @@ fn render_dynamic_table(f: &mut Frame, app: &App, area: Rect) {
         .map(|col| Constraint::Percentage(col.width))
         .collect();
 
-    let table = Table::new(rows, widths).header(header).highlight_style(
+    let table = Table::new(rows, widths).header(header).row_highlight_style(
         Style::default()
             .bg(Color::DarkGray)
             .fg(Color::White)
@@ -229,7 +229,7 @@ fn render_describe_view(f: &mut Frame, app: &App, area: Rect) {
         .unwrap_or_else(|| "No item selected".to_string());
 
     // Apply JSON syntax highlighting
-    let lines: Vec<Line> = json.lines().map(|l| highlight_json_line(l)).collect();
+    let lines: Vec<Line> = json.lines().map(highlight_json_line).collect();
     let total_lines = lines.len();
 
     let title = if let Some(resource) = app.current_resource() {

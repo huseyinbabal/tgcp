@@ -20,7 +20,7 @@ fn render_confirm_dialog(f: &mut Frame, app: &App) {
         return;
     };
 
-    let area = centered_rect(60, 9, f.size());
+    let area = centered_rect(60, 9, f.area());
 
     f.render_widget(Clear, area);
 
@@ -96,7 +96,7 @@ fn render_warning_dialog(f: &mut Frame, app: &App) {
     let lines = (message.len() / 50) + 1;
     let height = (6 + lines).min(15) as u16;
 
-    let area = centered_rect(70, height, f.size());
+    let area = centered_rect(70, height, f.area());
 
     f.render_widget(Clear, area);
 

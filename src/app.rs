@@ -5,7 +5,9 @@ use serde_json::Value;
 use crate::config::Config;
 use crate::gcp::client::GcpClient;
 use crate::gcp::dispatch::{execute_action, list_resources};
-use crate::resource::registry::{extract_json_value, get_all_resource_keys, get_resource, ResourceDef};
+use crate::resource::registry::{
+    extract_json_value, get_all_resource_keys, get_resource, ResourceDef,
+};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Mode {
@@ -30,6 +32,7 @@ pub struct PendingAction {
     pub selected_yes: bool,
     /// Action data
     pub action_key: String,
+    #[allow(dead_code)]
     pub resource_id: String,
 }
 
@@ -105,7 +108,12 @@ pub struct App {
 }
 
 impl App {
-    pub async fn new(zone: Option<String>, project: Option<String>, config: Config, readonly: bool) -> Result<Self> {
+    pub async fn new(
+        zone: Option<String>,
+        project: Option<String>,
+        config: Config,
+        readonly: bool,
+    ) -> Result<Self> {
         let client = GcpClient::new(zone.clone(), project.clone()).await?;
         let project = client.project.clone();
         let zone = client.zone.clone();
@@ -186,6 +194,7 @@ impl App {
 
     /// Create App from pre-initialized components (used with splash screen)
     #[allow(clippy::too_many_arguments)]
+    #[allow(dead_code)]
     pub fn from_initialized(
         client: GcpClient,
         project: String,
@@ -294,7 +303,7 @@ impl App {
         if let Some(resource) = get_resource(&self.resource_key) {
             // Get parent item if we're in a sub-resource context
             let parent_item = self.parent_context.as_ref().map(|ctx| &ctx.item);
-            
+
             match list_resources(&self.client, resource, parent_item).await {
                 Ok(items) => {
                     let prev_selected = self.selected;
@@ -359,6 +368,7 @@ impl App {
         }
     }
 
+    #[allow(dead_code)]
     pub fn toggle_filter(&mut self) {
         self.filter_active = !self.filter_active;
     }
@@ -463,6 +473,7 @@ impl App {
         }
     }
 
+    #[allow(dead_code)]
     pub fn page_down(&mut self, page_size: usize) {
         match self.mode {
             Mode::Projects => {
@@ -479,13 +490,13 @@ impl App {
             }
             _ => {
                 if !self.filtered_items.is_empty() {
-                    self.selected =
-                        (self.selected + page_size).min(self.filtered_items.len() - 1);
+                    self.selected = (self.selected + page_size).min(self.filtered_items.len() - 1);
                 }
             }
         }
     }
 
+    #[allow(dead_code)]
     pub fn page_up(&mut self, page_size: usize) {
         match self.mode {
             Mode::Projects => {
@@ -586,6 +597,7 @@ impl App {
     }
 
     /// Enter confirmation mode for an action
+    #[allow(dead_code)]
     pub fn enter_confirm_mode(&mut self, pending: PendingAction) {
         self.pending_action = Some(pending);
         self.mode = Mode::Confirm;
@@ -867,10 +879,8 @@ impl App {
     /// Find sub-resource by shortcut key and return its resource_key
     pub fn find_sub_resource_by_shortcut(&self, shortcut: &str) -> Option<String> {
         // Must have a selected item to navigate to sub-resource
-        if self.selected_item().is_none() {
-            return None;
-        }
-        
+        self.selected_item()?;
+
         self.current_resource()?
             .sub_resources
             .iter()
@@ -879,6 +889,7 @@ impl App {
     }
 
     /// Get action hints for the current resource (for display in footer)
+    #[allow(dead_code)]
     pub fn get_action_hints(&self) -> Vec<(String, String)> {
         let Some(resource) = self.current_resource() else {
             return Vec::new();
