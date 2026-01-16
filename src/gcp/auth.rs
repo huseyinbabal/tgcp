@@ -29,6 +29,7 @@ static TOKEN_CACHE: RwLock<Option<CachedToken>> = RwLock::new(None);
 #[derive(Debug, Deserialize)]
 struct ServiceAccountCredentials {
     #[serde(rename = "type")]
+    #[allow(dead_code)]
     cred_type: Option<String>,
     client_email: Option<String>,
     private_key: Option<String>,
@@ -40,6 +41,7 @@ struct ServiceAccountCredentials {
 #[derive(Debug, Deserialize)]
 struct UserCredentials {
     #[serde(rename = "type")]
+    #[allow(dead_code)]
     cred_type: Option<String>,
     client_id: Option<String>,
     client_secret: Option<String>,
@@ -62,6 +64,7 @@ struct JwtClaims {
 struct TokenResponse {
     access_token: String,
     expires_in: Option<i64>,
+    #[allow(dead_code)]
     token_type: Option<String>,
 }
 
@@ -77,7 +80,7 @@ impl TokenProvider {
     /// 5. GCP metadata server (for running on GCP infrastructure)
     pub async fn get_token() -> Result<String> {
         debug!("Getting access token");
-        
+
         // Check cache first
         if let Some(token) = Self::get_cached_token() {
             trace!("Using cached token");
@@ -98,7 +101,10 @@ impl TokenProvider {
 
         // 3. JSON file path
         if let Ok(path) = env::var("GOOGLE_APPLICATION_CREDENTIALS") {
-            info!("Using credentials from GOOGLE_APPLICATION_CREDENTIALS: {}", path);
+            info!(
+                "Using credentials from GOOGLE_APPLICATION_CREDENTIALS: {}",
+                path
+            );
             let json = fs::read_to_string(&path)
                 .with_context(|| format!("Failed to read credentials file: {}", path))?;
             return Self::get_token_from_json(&json).await;
@@ -134,7 +140,7 @@ impl TokenProvider {
     /// Get project ID from credentials or environment
     pub async fn get_project() -> Result<String> {
         debug!("Getting GCP project");
-        
+
         // 1. Direct env var
         if let Ok(p) = env::var("GCP_PROJECT") {
             info!("Using project from GCP_PROJECT: {}", p);
@@ -163,7 +169,10 @@ impl TokenProvider {
             if let Ok(json) = fs::read_to_string(&path) {
                 if let Ok(creds) = serde_json::from_str::<ServiceAccountCredentials>(&json) {
                     if let Some(project) = creds.project_id {
-                        info!("Using project from GOOGLE_APPLICATION_CREDENTIALS: {}", project);
+                        info!(
+                            "Using project from GOOGLE_APPLICATION_CREDENTIALS: {}",
+                            project
+                        );
                         return Ok(project);
                     }
                 }
@@ -278,7 +287,10 @@ impl TokenProvider {
             return Err(anyhow!("Token exchange failed ({}): {}", status, text));
         }
 
-        let token_resp: TokenResponse = resp.json().await.context("Failed to parse token response")?;
+        let token_resp: TokenResponse = resp
+            .json()
+            .await
+            .context("Failed to parse token response")?;
 
         // Cache the token
         let expires_at = Utc::now() + Duration::seconds(token_resp.expires_in.unwrap_or(3600) - 60);
@@ -320,7 +332,10 @@ impl TokenProvider {
             return Err(anyhow!("Token refresh failed ({}): {}", status, text));
         }
 
-        let token_resp: TokenResponse = resp.json().await.context("Failed to parse token response")?;
+        let token_resp: TokenResponse = resp
+            .json()
+            .await
+            .context("Failed to parse token response")?;
 
         // Cache the token
         let expires_at = Utc::now() + Duration::seconds(token_resp.expires_in.unwrap_or(3600) - 60);
@@ -371,11 +386,14 @@ impl TokenProvider {
         }
 
         let project = resp.text().await?;
-        
+
         // Validate that we got a real project ID, not HTML from a captive portal
-        if project.contains('<') || project.contains('>') || project.to_lowercase().contains("html") {
+        if project.contains('<') || project.contains('>') || project.to_lowercase().contains("html")
+        {
             debug!("Metadata server returned HTML instead of project ID");
-            return Err(anyhow!("Metadata server returned invalid response (possible captive portal)"));
+            return Err(anyhow!(
+                "Metadata server returned invalid response (possible captive portal)"
+            ));
         }
 
         Ok(project.trim().to_string())

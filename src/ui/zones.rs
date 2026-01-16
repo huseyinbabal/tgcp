@@ -48,7 +48,7 @@ pub fn render(f: &mut Frame, app: &App, area: Rect) {
 
     let widths = [ratatui::layout::Constraint::Percentage(100)];
 
-    let table = Table::new(rows, widths).header(header).highlight_style(
+    let table = Table::new(rows, widths).header(header).row_highlight_style(
         Style::default()
             .bg(Color::DarkGray)
             .fg(Color::White)

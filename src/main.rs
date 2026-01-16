@@ -69,9 +69,7 @@ impl LogLevel {
 }
 
 fn setup_logging(level: LogLevel) -> Option<tracing_appender::non_blocking::WorkerGuard> {
-    let Some(tracing_level) = level.to_tracing_level() else {
-        return None;
-    };
+    let tracing_level = level.to_tracing_level()?;
 
     // Get log file path
     let log_path = get_log_path();

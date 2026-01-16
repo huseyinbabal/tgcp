@@ -83,13 +83,16 @@ pub struct SubResourceDef {
     pub resource_key: String,
     pub display_name: String,
     pub shortcut: String,
+    #[allow(dead_code)]
     pub parent_id_field: String,
+    #[allow(dead_code)]
     pub filter_param: String,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct ResourceDef {
     pub display_name: String,
+    #[allow(dead_code)]
     pub service: String,
     pub api: ApiDef,
     pub response_path: String,
@@ -171,18 +174,14 @@ pub fn extract_json_value(value: &Value, path: &str) -> String {
 
     // Convert path to JSON pointer format
     // "networkInterfaces[0].accessConfigs[0].natIP" -> "/networkInterfaces/0/accessConfigs/0/natIP"
-    let ptr = format!(
-        "/{}",
-        path.replace('.', "/").replace('[', "/").replace(']', "")
-    );
+    let ptr = format!("/{}", path.replace(['.', '['], "/").replace(']', ""));
 
     if let Some(v) = value.pointer(&ptr) {
         return format_json_value(v);
     }
 
     // Try handling nested Tags (GCP uses labels)
-    if path.starts_with("labels.") {
-        let tag_key = &path[7..]; // Skip "labels."
+    if let Some(tag_key) = path.strip_prefix("labels.") {
         if let Some(labels) = value.get("labels") {
             if let Some(tag_value) = labels.get(tag_key) {
                 return format_json_value(tag_value);
@@ -200,10 +199,10 @@ fn format_json_value(v: &Value) -> String {
             // Clean up GCP URLs (e.g., machineType URLs)
             if s.starts_with("https://www.googleapis.com/") {
                 // Extract the last part of the URL
-                s.split('/').last().unwrap_or(s).to_string()
+                s.split('/').next_back().unwrap_or(s).to_string()
             } else if s.starts_with("projects/") {
                 // Extract the last meaningful part
-                s.split('/').last().unwrap_or(s).to_string()
+                s.split('/').next_back().unwrap_or(s).to_string()
             } else {
                 s.clone()
             }

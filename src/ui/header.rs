@@ -195,7 +195,7 @@ fn render_keybindings_col1(f: &mut Frame, app: &App, area: Rect) {
             .collect();
 
         // Take first half of actions for column 1
-        let half = (actions.len() + 1) / 2;
+        let half = actions.len().div_ceil(2);
         b.extend(actions.into_iter().take(half));
         b.push(("<?>".to_string(), "Help".to_string()));
         b
@@ -242,7 +242,7 @@ fn render_keybindings_col2(f: &mut Frame, app: &App, area: Rect) {
             .collect();
 
         // Skip first half, take second half
-        let half = (actions.len() + 1) / 2;
+        let half = actions.len().div_ceil(2);
         bindings.extend(actions.into_iter().skip(half));
     }
 
